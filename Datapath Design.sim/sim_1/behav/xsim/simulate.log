@@ -1,0 +1,9 @@
+Time resolution is 1 ps
+     Number of sNaNs:           1
+     Number of qNaNs:           1
+Number of infinities:           2
+    Number of Zeroes:           2
+Number of Subnormals:           2
+   Number of Normals:           2
+               Total:          10
+$stop called at time : 100 ns : File "C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v" Line 95
