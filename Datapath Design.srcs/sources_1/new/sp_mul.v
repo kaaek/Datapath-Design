@@ -23,23 +23,25 @@
 module sp_mul(
     input [31:0] a,
     input [31:0] b,
-    //input snan,
-    //input qnan,
-    //input infinity,
-    //input zero,
-    //input subnormal,
-    //input normal,
     output [31:0] product
     );
+    // classifications of operands a & b
+    wire aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign;
+    wire bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign;
+    reg [22:0] aSig, bSig;
+    reg [7:0] aExp, bExp; // biased
+    reg aSign, bSign;
+    reg [23:0] aMan, bMan;
+    sp_class aClass(a, aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign, aExp, aSig);
+    sp_class bClass(b, bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign, bExp, bSig);
     
-    wire aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal;
-    wire bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal;
-    
-    sp_class aClass(a, aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal);
-    sp_class bClass(b, bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal);
-    
-    reg [31:0] pTemp;
-    reg snan, qnan, infinity, zero, subnormal, normal, pSign;
+    // Temporary variables
+    reg [47:0] productMant;
+    reg [8:0] sumExp;
+    reg [23:0] normMant;
+    reg [8:0] normExp;
+    reg [7:0] finalExp;
+    reg [31:0] result;
     
     always @(*)
     begin
@@ -71,7 +73,47 @@ module sp_mul(
                 pTemp = {pSign, {31{1'b0}}}; // +/- zero
                 zero = 1;
             end
+        
+        else if ((aZero | bZero) == 1'b1 || (aSubnormal & bSubnormal) == 1'b1)
+        // two subnormals give zero
+            begin
+                pTemp = {pSign, {31{1'b0}}};
+                zero = 1;
+            end
+        // We're left with subnormal and normal number multiplication, do:
+        // Normalize then multiply the mantissas
+        // Add exponents
+        // Normalize product and truncate if needed
+        else begin
+            aMan = {1'b1, aSig}; // MSB 1 is implied.
+            bMan = {1'b1, bSig};
+            productMant = aMan * bMan; // 24 x 24 = 48 bits
+            sumExp = aExp + bExp - 127;
+            if (productMant[47] == 1)
+                begin
+                    normMant = productMant[47:24]; // top 24 bits
+                    normExp = sumExp + 1; // shift left, increase exponent
+                end
+            else
+                begin
+                    normMant = productMant[46:23];
+                    normExp = sumExp; // no shift needed
+                end
+            
+            if (normExp > 254)
+                begin
+                    finalExp = 255;
+                    result = {pSign, 8'hFF,23'b0}; // Overflow
+                end
+            else if (normExp < 1)
+                begin
+                    result = 32'b0; // Underflow    
+                end
+            else
+                begin
+                    finalExp = normExp[7:0];
+                    result = {pSign, finalExp, normMant[22:0]};
+                end
+        end
     end
-    
-    
 endmodule

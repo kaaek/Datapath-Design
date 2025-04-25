@@ -30,7 +30,10 @@ module sp_class(
     output infinity,
     output zero,
     output subnormal,
-    output normal
+    output normal,
+    output sign,
+    output [7:0] exp,
+    output [22:0] significand
     );
     
     wire expOnes, expZeroes, manZeroes;
@@ -48,5 +51,8 @@ module sp_class(
     assign zero = expZeroes & manZeroes;
     assign subnormal = expZeroes & ~manZeroes;
     assign normal = ~expOnes & ~expZeroes;
+    assign sign = float[31];
+    assign exp = float [30:23] - 127;
+    assign significand = float[22:0];
     
 endmodule
