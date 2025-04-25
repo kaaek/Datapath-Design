@@ -1,2 +1,21 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Ignore Vivado build folders
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+
+# Ignore Vivado logs and misc
+*.jou
+*.log
+*.str
+*.tmp
+*.wdb
+*.webtalk/
+
+# Vivado auto-generated project files (optional)
+*.xpr.cache
+*.data/
+*.Xil/
