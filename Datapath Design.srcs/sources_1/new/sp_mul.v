@@ -28,7 +28,6 @@ module sp_mul(
     // classifications of operands a & b
     wire [22:0] aSig, bSig;
     wire [7:0] aExp, bExp; // biased
-    wire aSign, bSign;
     wire aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign;
     wire bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign;
     
