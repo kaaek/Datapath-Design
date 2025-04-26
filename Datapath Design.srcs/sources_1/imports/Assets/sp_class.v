@@ -52,7 +52,7 @@ module sp_class(
     assign subnormal = expZeroes & ~manZeroes;
     assign normal = ~expOnes & ~expZeroes;
     assign sign = float[31];
-    assign exp = float [30:23] - 127;
+    assign exp = float [30:23];
     assign significand = float[22:0];
     
 endmodule
