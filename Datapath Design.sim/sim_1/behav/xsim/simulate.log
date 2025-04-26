@@ -1,12 +1,12 @@
 Time resolution is 1 ps
-a = 3f800000, b = 3f800000, product = 7f800000
-a = 40000000, b = 40400000, product = 7f800000
-a = 00000001, b = 3f800000, product = 01000001
-a = 7f800000, b = 3f800000, product = 01000001
-a = 7f800000, b = 00000000, product = 01000001
-a = 7fc00000, b = 3f800000, product = 01000001
-a = bf800000, b = 3f800000, product = ff800000
-a = 00000000, b = 00000000, product = ff800000
-a = 00800000, b = 00800000, product = 42800000
-a = 3f800000, b = bf800000, product = ff800000
-$stop called at time : 100 ns : File "C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/new/sp_mul_tb.v" Line 60
+a = 3f800000, b = 3f800000, diff = 00000000
+a = 40400000, b = 40000000, diff = 3f800000
+a = 3f800000, b = 00000000, diff = 3f800000
+a = 7f800000, b = 7f800000, diff = 7fbfffff
+a = 7f800000, b = ff800000, diff = 7f800000
+a = 3f800000, b = bf800000, diff = 40000000
+a = 3f800000, b = 3f000000, diff = 3f000000
+a = 3f800000, b = 3f800000, diff = 00000000
+a = 00800000, b = 00800000, diff = 00000000
+a = 00000001, b = 00000001, diff = 00000000
+$stop called at time : 100 ns : File "C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sim_1/new/sp_sub_tb.v" Line 36

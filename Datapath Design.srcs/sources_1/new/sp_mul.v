@@ -53,73 +53,49 @@ module sp_mul(
         pSign = aSign ^ bSign;
         result = 32'h7FC00000; // initialize to sNaN.
         {snan, qnan, infinity, zero, subnormal, normal} = 6'b000000; // initialize to zero. By the end of the implementation, 1 of the flags must necessarily be set, no more and no less.
-        if (aSnan | bSnan) 
-            begin
-            // a or b is an sNan, set the product to that value
-                pTemp = aSnan == 1'b1 ? a : b;
-                snan = 1;
-                
-            end
-        else if (aQnan | bQnan)
-        // In this implementation, qNans and sNans are passed the same way, even though the sNaN should raise an exception. Checking both types is separated for the purpose of making it
-        // easy for such an integration to occur.
-            begin
-                pTemp = aQnan == 1'b1 ? a : b;
-                qnan = 1;
-            end
-        else if ((aInfinity | bInfinity) == 1'b1)
-            begin
-                qnan = aZero | bZero; // inf * zero = NaN or infinity depending on the value of bit 22
-                infinity = ~qnan;
-                pTemp = {pSign, {8{1'b1}}, qnan, {22{1'b0}}};
-            end
-        else if ((aZero | bZero) == 1'b1)
-            begin
-                pTemp = {pSign, {31{1'b0}}}; // +/- zero
-                zero = 1;
-            end
-        
-        else if ((aZero | bZero) == 1'b1 || (aSubnormal & bSubnormal) == 1'b1)
-        // two subnormals give zero
-            begin
-                pTemp = {pSign, {31{1'b0}}};
-                zero = 1;
-            end
-        // We're left with subnormal and normal number multiplication, do:
-        // Normalize then multiply the mantissas
-        // Add exponents
-        // Normalize product and truncate if needed
-        else begin
-            aMan = {1'b1, aSig}; // MSB 1 is implied.
-            bMan = {1'b1, bSig};
-            productMant = aMan * bMan; // 24 x 24 = 48 bits
-            sumExp = aExp + bExp - 127;
-            if (productMant[47] == 1)
-                begin
-                    normMant = productMant[47:24]; // top 24 bits
-                    normExp = sumExp + 1; // shift left, increase exponent
-                end
-            else
-                begin
-                    normMant = productMant[46:23];
-                    normExp = sumExp; // no shift needed
-                end
-            
-            if (normExp > 254)
-                begin
-                    finalExp = 255;
-                    result = {pSign, 8'hFF,23'b0}; // Overflow
-                end
-            else if (normExp < 1)
-                begin
-                    result = 32'b0; // Underflow    
-                end
-            else
-                begin
-                    finalExp = normExp[7:0];
-                    result = {pSign, finalExp, normMant[22:0]};
-                end
+        if (aSnan || bSnan) begin
+            result = aSnan ? a : b; // propagate sNaN
         end
+        else if (aQnan || bQnan) begin
+            result = aQnan ? a : b; // propagate qNaN
+        end
+        else if ((aInfinity && bZero) || (bInfinity && aZero)) begin
+            result = 32'h7FC00000; // inf * 0 = NaN
+        end
+        else if (aInfinity || bInfinity) begin
+            result = {pSign, 8'hFF, 23'b0}; // inf * finite = inf
+        end
+        else if (aZero || bZero) begin
+            result = {pSign, 31'b0}; // 0 * anything = 0
+        end 
+        else begin
+            // Normal multiplication (finite × finite)
+            aMan = {1'b1, aSig};
+            bMan = {1'b1, bSig};
+            productMant = aMan * bMan;
+            sumExp = aExp + bExp - 127;
+    
+            if (productMant[47] == 1) begin
+                normMant = productMant[47:24];
+                normExp = sumExp + 1;
+            end
+            else begin
+                normMant = productMant[46:23];
+                normExp = sumExp;
+            end
+
+            if (normExp > 254) begin
+                result = {pSign, 8'hFF, 23'b0}; // Overflow to inf
+            end
+            else if (normExp < 1) begin
+                result = {pSign, 31'b0}; // Underflow to zero
+            end
+            else begin
+                finalExp = normExp[7:0];
+                result = {pSign, finalExp, normMant[22:0]};
+            end
+        end
+
     end
     
     assign product = result;
