@@ -110,6 +110,7 @@ module archer_rv32i_single_cycle (
     wire [1:0] d_byte_mask;
     wire d_sign_ext_n;
     wire [`XLEN-1:0] d_data_mem_out;
+    wire [`XLEN-1:0] d_mem_data_send;
 
     // instruction word fields
 
