@@ -3,5 +3,7 @@
 Nov  8 2024
 22:36:57
 C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.sim/sim_1/behav/xsim/glbl.v,1724786425,verilog,,,,glbl,,,,,,,,
-C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class.v,1745616911,verilog,,C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v,,sp_class,,,,,,,,
+C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class.v,1745616911,verilog,,C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/new/sp_mul.v,,sp_class,,,,,,,,
 C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v,1745609291,verilog,,,,sp_class_tb,,,,,,,,
+C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/new/sp_mul.v,1745626784,verilog,,C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/new/sp_mul_tb.v,,sp_mul,,,,,,,,
+C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/new/sp_mul_tb.v,1745626620,verilog,,,,sp_mul_tb,,,,,,,,

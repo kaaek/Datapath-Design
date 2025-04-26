@@ -26,36 +26,41 @@ module sp_mul(
     output [31:0] product
     );
     // classifications of operands a & b
+    wire [22:0] aSig, bSig;
+    wire [7:0] aExp, bExp; // biased
+    wire aSign, bSign;
     wire aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign;
     wire bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign;
-    reg [22:0] aSig, bSig;
-    reg [7:0] aExp, bExp; // biased
-    reg aSign, bSign;
-    reg [23:0] aMan, bMan;
-    sp_class aClass(a, aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign, aExp, aSig);
-    sp_class bClass(b, bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign, bExp, bSig);
     
-    // Temporary variables
+    reg pSign;
+    reg [23:0] aMan, bMan;
     reg [47:0] productMant;
     reg [8:0] sumExp;
     reg [23:0] normMant;
     reg [8:0] normExp;
     reg [7:0] finalExp;
     reg [31:0] result;
+    reg [31:0] pTemp;
+    reg snan, qnan, infinity, zero, subnormal, normal;
+    
+    sp_class aClass(a, aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign, aExp, aSig);
+    sp_class bClass(b, bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign, bExp, bSig);
+    
     
     always @(*)
     begin
         // IEEE 754-2019: "when neither the inputs nor result are NaN, the sign of the product ... is the exclusive OR of the operads' signs."
-        pSign = a[31] ^ b[31];
-        pTemp = {1'b0, {8{1'b1}}, 1'b0, {22{1'b1}}}; // initialize to sNaN.
+        pSign = aSign ^ bSign;
+        result = 32'h7FC00000; // initialize to sNaN.
         {snan, qnan, infinity, zero, subnormal, normal} = 6'b000000; // initialize to zero. By the end of the implementation, 1 of the flags must necessarily be set, no more and no less.
-        if ((aSnan | bSnan) == 1'b1) 
+        if (aSnan | bSnan) 
             begin
             // a or b is an sNan, set the product to that value
                 pTemp = aSnan == 1'b1 ? a : b;
                 snan = 1;
+                
             end
-        else if ((aQnan | bQnan) == 1'b1)
+        else if (aQnan | bQnan)
         // In this implementation, qNans and sNans are passed the same way, even though the sNaN should raise an exception. Checking both types is separated for the purpose of making it
         // easy for such an integration to occur.
             begin
@@ -116,4 +121,7 @@ module sp_mul(
                 end
         end
     end
+    
+    assign product = result;
+
 endmodule

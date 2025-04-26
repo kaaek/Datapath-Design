@@ -1,0 +1,91 @@
+
+*** Running vivado
+    with args -log sp_class_tb.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source sp_class_tb.tcl
+
+
+
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Sat Apr 26 03:04:35 2025
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source sp_class_tb.tcl -notrace
+Command: synth_design -top sp_class_tb -part xc7k70tfbv676-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7k70t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k70t'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 15124
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 773.586 ; gain = 479.770
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'sp_class_tb' [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:23]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+WARNING: [Synth 8-311] ignoring non-constant assignment in initial block [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:64]
+WARNING: [Synth 8-6896] if statement with non-constant condition is inside initial block, initial block items will be ignored [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:66]
+INFO: [Synth 8-251]      Number of sNaNs:  [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:86]
+INFO: [Synth 8-251]      Number of qNaNs:  [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:87]
+INFO: [Synth 8-251] Number of infinities:  [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:88]
+INFO: [Synth 8-251]     Number of Zeroes:  [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:89]
+INFO: [Synth 8-251] Number of Subnormals:  [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:90]
+INFO: [Synth 8-251]    Number of Normals:  [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:91]
+INFO: [Synth 8-251]                Total:  [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:92]
+WARNING: [Synth 8-11581] system task call 'stop' not supported [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:95]
+INFO: [Synth 8-6157] synthesizing module 'sp_class' [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class.v:26]
+INFO: [Synth 8-6155] done synthesizing module 'sp_class' (0#1) [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class.v:26]
+WARNING: [Synth 8-7071] port 'sign' of module 'sp_class' is unconnected for instance 'inst1' [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:29]
+WARNING: [Synth 8-7071] port 'exp' of module 'sp_class' is unconnected for instance 'inst1' [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:29]
+WARNING: [Synth 8-7071] port 'significand' of module 'sp_class' is unconnected for instance 'inst1' [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:29]
+WARNING: [Synth 8-7023] instance 'inst1' of module 'sp_class' has 10 connections declared, but only 7 given [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:29]
+INFO: [Synth 8-6155] done synthesizing module 'sp_class_tb' (0#1) [C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sources_1/imports/Assets/sp_class_tb.v:23]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:06 ; elapsed = 00:00:09 . Memory (MB): peak = 878.102 ; gain = 584.285
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:07 ; elapsed = 00:00:10 . Memory (MB): peak = 878.102 ; gain = 584.285
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7k70tfbv676-1
+INFO: [Device 21-403] Loading part xc7k70tfbv676-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:07 ; elapsed = 00:00:10 . Memory (MB): peak = 878.102 ; gain = 584.285
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:10 . Memory (MB): peak = 878.102 ; gain = 584.285
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input    8 Bit       Adders := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
