@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sim_1/new/FPU_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module FPU_tb
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sim_1/new/other_archer_rv32_single_cycle_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module archer_rv32i_single_cycle_tb
