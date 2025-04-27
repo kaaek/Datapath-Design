@@ -1,7 +1,7 @@
-Running: xsim.dir/archer_rv32i_single_cycle_tb_behav/xsimk.exe -simmode gui -wdb archer_rv32i_single_cycle_tb_behav.wdb -simrunnum 0 -socket 58130
+Running: xsim.dir/archer_rv32i_single_cycle_tb_behav/xsimk.exe -simmode gui -wdb archer_rv32i_single_cycle_tb_behav.wdb -simrunnum 0 -socket 59269
 Design successfully loaded
-Design Loading Memory Usage: 28656 KB (Peak: 28656 KB)
-Design Loading CPU Usage: 702 ms
+Design Loading Memory Usage: 28636 KB (Peak: 28636 KB)
+Design Loading CPU Usage: 717 ms
 Simulation completed
-Simulation Memory Usage: 29432 KB (Peak: 29432 KB)
-Simulation CPU Usage: 733 ms
+Simulation Memory Usage: 29384 KB (Peak: 29384 KB)
+Simulation CPU Usage: 765 ms
