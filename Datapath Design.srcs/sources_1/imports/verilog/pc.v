@@ -13,21 +13,40 @@
 //
 // Program Counter (PC) Register
 
-`include "archerdefs.v"
+//`include "archerdefs.v"
+
+//module pc (
+//	input clk,
+//	input rst_n,
+//	input [`XLEN-1:0] datain,
+//	output reg [`XLEN-1:0] dataout
+//	);
+  
+//  always @(posedge clk) 
+//  begin
+//    if (rst_n == 1'b0)
+//      dataout <= `XLEN'd0;
+//    else
+//      dataout <= datain;
+//  end
+  
+//endmodule
 
 module pc (
-	input clk,
-	input rst_n,
-	input [`XLEN-1:0] datain,
-	output reg [`XLEN-1:0] dataout
-	);
-  
-  always @(posedge clk) 
-  begin
-    if (rst_n == 1'b0)
-      dataout <= `XLEN'd0;
-    else
-      dataout <= datain;
-  end
-  
+  input clk,
+  input rst_n,
+  input [`XLEN-1:0] datain,
+  output reg [`XLEN-1:0] dataout
+);
+
+always @(posedge clk or negedge rst_n)
+begin
+  if (!rst_n)
+    dataout <= 0;      // **FORCE PC to zero when reset is active**
+  else
+    dataout <= datain;
+end
+
 endmodule
+
+

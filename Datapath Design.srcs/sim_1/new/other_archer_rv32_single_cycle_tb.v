@@ -42,57 +42,41 @@ module archer_rv32i_single_cycle_tb;
         .dataout(tb_dmem_dataout)
     );
 
-//    sram imem (
-//        .clk(tb_clk),
-//        .wen(1'b0), // ROM behavior
-//        .ben(4'b0000),
-//        .addr(tb_imem_addr[31:2]),
-//        .datain(32'b0),
-//        .dataout(tb_imem_dataout)
-//    );
-
-    rom imem (
-        .addr(tb_imem_addr),
+    sram imem (
+        .clk(tb_clk),
+        .wen(1'b0), // ROM behavior
+        .ben(4'b0000),
+        .addr(tb_imem_addr[31:2]),
+        .datain(32'b0),
         .dataout(tb_imem_dataout)
     );
-
 
     // Clock generation
     always #5 tb_clk = ~tb_clk;
 
     // Stimulus
-//    initial begin
-//    // Reset pulse
-//        tb_rst_n = 0;
-//        #20;
-//        tb_rst_n = 1;
-//        #10;
+    initial begin
+    // Reset pulse
+        tb_rst_n = 0;
+        #20;
+        tb_rst_n = 1;
+        #10;
     
-//        // Preload register values manually
-//        archer.RF_inst.RF[1] = 32'h3f800000; // x1 = 1.0
-//        archer.RF_inst.RF[2] = 32'h3f800000; // x2 = 1.0
+        // Preload register values manually
+        archer.RF_inst.RF[1] = 32'h3f800000; // x1 = 1.0
+        archer.RF_inst.RF[2] = 32'h3f800000; // x2 = 1.0
     
-//        #100;
+        #100;
     
-//        // Display results
-//        $display("\n--- Test Results ---");
-//        $display("Register x1 (should be 1.0): %h", archer.reg_x1);
-//        $display("Register x2 (should be 1.0): %h", archer.reg_x2);
-//        $display("Register x3 (ADD result should be 2.0): %h", archer.reg_x3);
-//        $display("Register x4 (MUL result should be 1.0): %h", archer.reg_x4);
+        // Display results
+        $display("\n--- Test Results ---");
+        $display("Register x1 (should be 1.0): %h", archer.reg_x1);
+        $display("Register x2 (should be 1.0): %h", archer.reg_x2);
+        $display("Register x3 (ADD result should be 2.0): %h", archer.reg_x3);
+        $display("Register x4 (MUL result should be 1.0): %h", archer.reg_x4);
     
-//        $stop;
-//    end
-
-        initial begin
-            tb_rst_n = 0;
-            #20;
-            tb_rst_n = 1;
-            #1000;    // (or even #10000 to let it run many instructions)
-            $stop;
-        end
-
-        
+        $stop;
+    end
 
 
 endmodule

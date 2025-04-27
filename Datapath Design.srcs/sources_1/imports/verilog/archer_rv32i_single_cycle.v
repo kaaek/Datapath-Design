@@ -130,6 +130,13 @@ module archer_rv32i_single_cycle (
                 .rst_n(rst_n), 
                 .datain(d_pc_in), 
                 .dataout(d_pc_out));
+                
+    // Instruction Memory (ROM) instance
+    rom imem (
+        .addr(tb_imem_addr),
+        .dataout(tb_imem_dataout)
+    );
+    
     
     lmb limb_inst (.proc_addr(d_pc_out), 
                    .proc_data_send(`XLEN'd0), 
