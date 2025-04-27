@@ -49,36 +49,8 @@ The FPU was designed and verified separately, and then integrated into the proce
 4. Run "Elaborate Design".
 5. Run "Simulate Behavioral Model".
 
-
 ---
 
-## Testbench Summary
-
-- **Registers x1 and x2** are manually preloaded with 1.0 (`0x3f800000`).
-- **Instruction Memory** is preloaded with the following program:
-
-  | Address | Instruction |
-  |---------|-------------|
-  | 0x00 | `FADD.S x3, x1, x2` |
-  | 0x04 | `FMUL.S x4, x1, x2` |
-  | 0x08 | `FSUB.S x5, x1, x2` |
-  | 0x0C | `FSW f2, 0(x1)` |
-  | 0x10 | `FADD.S f2, f2, f2` |
-  | 0x14 | `FLW f2, 0(x1)` |
-  | 0x18 | `FADD.S f3, f2, f2` |
-
-- After simulation, the following outputs are expected:
-
-  | Register | Expected Value |
-  |----------|----------------|
-  | x1 | `3f800000` (1.0) |
-  | x2 | `3f800000` (1.0) |
-  | x3 | `40000000` (2.0) |
-  | x4 | `3f800000` (1.0) |
-  | x5 | `00000000` (0.0) |
-
-
----
 
 ## Special Notes
 
