@@ -26,18 +26,14 @@ module sp_add(
     output reg [31:0] sum
     );
 
-    wire aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal;
-    wire bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal;
+    wire [23:0] aSig, bSig;
+    wire [7:0] aExp, bExp; // biased
+    wire aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign;
+    wire bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign;
 
-    wire aSign = a[31];
-    wire bSign = b[31];
-    wire [7:0] aExp = a[30:23];
-    wire [7:0] bExp = b[30:23];
-    wire [23:0] aMant = {1'b1, a[22:0]};
-    wire [23:0] bMant = {1'b1, b[22:0]};
     
-    sp_class aClass(a, aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign, aExp, aMant);
-    sp_class bClass(b, bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign, bExp, bMant);
+    sp_class aClass(a, aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign, aExp, aSig);
+    sp_class bClass(b, bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign, bExp, bSig);
     
     reg [24:0] alignedAMant, alignedBMant;
     reg [7:0] expDiff, resultExp;
@@ -65,13 +61,13 @@ module sp_add(
         // Align exponents
         if (aExp > bExp) begin
             expDiff = aExp - bExp;
-            alignedAMant = aMant;
-            alignedBMant = bMant >> expDiff;
+            alignedAMant = {1'b0, aSig};
+             alignedBMant = {1'b0, bSig} >> expDiff;
             resultExp = aExp;
         end else begin
             expDiff = bExp - aExp;
-            alignedAMant = aMant >> expDiff;
-            alignedBMant = bMant;
+            alignedAMant = {1'b0, aSig} >> expDiff;
+            alignedBMant = {1'b0, bSig};
             resultExp = bExp;
         end
 
@@ -104,7 +100,14 @@ module sp_add(
         if (resultMant == 0) begin
             sum = {resultSign, 31'b0}; // final result is zero
         end else begin
-            sum = {resultSign, resultExp, resultMant[22:0]};
+            // Insert check here:
+            if (resultExp > 254) begin
+                sum = {resultSign, 8'hFF, 23'b0}; // Overflow
+            end else if (resultExp < 1) begin
+                sum = {resultSign, 31'b0}; // Underflow
+            end else begin
+                sum = {resultSign, resultExp, resultMant[22:0]};
+            end
         end
     end
 end

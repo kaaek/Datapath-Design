@@ -33,7 +33,7 @@ module sp_class(
     output normal,
     output sign,
     output [7:0] exp,
-    output [22:0] significand
+    output [23:0] significand
     );
     
     wire expOnes, expZeroes, manZeroes;
@@ -53,6 +53,6 @@ module sp_class(
     assign normal = ~expOnes & ~expZeroes;
     assign sign = float[31];
     assign exp = float [30:23];
-    assign significand = float[22:0];
+    assign significand = (exp == 8'b0) ? {1'b0, float[22:0]} : {1'b1, float[22:0]};
     
 endmodule

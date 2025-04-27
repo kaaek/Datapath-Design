@@ -37,7 +37,7 @@ always @(*) begin
         2'b00: result = add_result; // ADD
         2'b01: result = sub_result; // SUB
         2'b10: result = mul_result; // MUL
-        default: result = 32'h00000000; // Default output zero for undefined opcodes
+        default: result = 32'h7FC00000; // qNaN for invalid opcodes
     endcase
 end
 

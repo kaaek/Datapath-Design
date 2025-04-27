@@ -26,7 +26,7 @@ module sp_mul(
     output [31:0] product
     );
     // classifications of operands a & b
-    wire [22:0] aSig, bSig;
+    wire [23:0] aSig, bSig;
     wire [7:0] aExp, bExp; // biased
     wire aSnan, aQnan, aInfinity, aZero, aSubnormal, aNormal, aSign;
     wire bSnan, bQnan, bInfinity, bZero, bSubnormal, bNormal, bSign;
@@ -69,8 +69,8 @@ module sp_mul(
         end 
         else begin
             // Normal multiplication (finite × finite)
-            aMan = {1'b1, aSig};
-            bMan = {1'b1, bSig};
+            aMan = (aSubnormal) ? {1'b0, aSig} : {1'b1, aSig};
+            bMan = (bSubnormal) ? {1'b0, bSig} : {1'b1, bSig};
             productMant = aMan * bMan;
             sumExp = aExp + bExp - 127;
     
