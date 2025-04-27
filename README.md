@@ -37,7 +37,7 @@ The FPU was designed and verified separately, and then integrated into the proce
 ## How It Works
 
 - The FPU operates **in parallel** with the ALU.
-- A control signal (`instruction_type`) selects whether to use ALU or FPU output.
+- The control module(control.v) reads and decodes the incoming 32-bit instruction and generates the the appropriate control signals to direct the ALU, FPU, and other processor components based on the instruction type.
 - The FPU decodes the operation (add, sub, mul) based on opcode fields.
 - Floating point load/store operations use the data memory directly, with appropriate wiring.
 
