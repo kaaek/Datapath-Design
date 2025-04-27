@@ -4,7 +4,7 @@
 
 This project extends the Archer RV32I single-cycle processor by integrating a Floating Point Unit (FPU) that supports IEEE-754 compliant single-precision operations.
 
-The project objective is for the Archer RV32I single-cycle processor to be able to handle:
+The project's objective is for the Archer RV32I single-cycle processor to be able to handle:
 - Floating point addition (`FADD.S`)
 - Floating point subtraction (`FSUB.S`)
 - Floating point multiplication (`FMUL.S`)
