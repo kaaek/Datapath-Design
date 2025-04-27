@@ -29,7 +29,11 @@ module archer_rv32i_single_cycle (
 	output [`XLEN-1:0] dmem_datain,
 	input [`XLEN-1:0] dmem_dataout,
 	output dmem_wen,
-	output [3:0] dmem_ben
+	output [3:0] dmem_ben,
+	output [31:0] reg_x1,
+    output [31:0] reg_x2,
+    output [31:0] reg_x3,
+    output [31:0] reg_x4
 	);
 	
     // pc wires
@@ -176,7 +180,7 @@ module archer_rv32i_single_cycle (
         .input0(d_fpu_out),
         .input1(d_data_mem_out),
         .muxout(d_fp_reg_file_datain)
-    );
+    );    
     			    
     regfile RF_inst (.clk(clk),
     		     .rst_n(rst_n),
@@ -186,7 +190,12 @@ module archer_rv32i_single_cycle (
     		     .rd(d_rd),
     		     .datain(d_reg_file_datain),
     		     .regA(d_regA),
-    		     .regB(d_regB));
+    		     .regB(d_regB),
+    		     .reg_x1(reg_x1),
+                .reg_x2(reg_x2),
+                .reg_x3(reg_x3),
+                .reg_x4(reg_x4)
+    		     );
 
     // FPU register file
     fregfile FRF_inst (

@@ -24,7 +24,11 @@ module regfile (
 	input [`LOG2_XRF_SIZE-1:0] rd,
 	input [`XLEN-1:0] datain,
 	output [`XLEN-1:0] regA,
-	output [`XLEN-1:0] regB
+	output [`XLEN-1:0] regB,
+	output [`XLEN-1:0] reg_x1,   // <--- NEW
+    output [`XLEN-1:0] reg_x2,   // <--- NEW
+    output [`XLEN-1:0] reg_x3,   // <--- NEW
+    output [`XLEN-1:0] reg_x4    // <--- NEW
 	);
 	
   integer i;
@@ -32,6 +36,11 @@ module regfile (
   
   assign regA = RF[rs1];
   assign regB = RF[rs2];
+  
+  assign reg_x1 = RF[1];
+  assign reg_x2 = RF[2];
+  assign reg_x3 = RF[3];
+  assign reg_x4 = RF[4];
   
   always @(posedge clk)
   begin
