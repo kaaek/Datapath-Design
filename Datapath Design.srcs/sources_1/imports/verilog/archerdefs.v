@@ -18,6 +18,7 @@
 `define	ADDRLEN         10
 `define	LOG2_XRF_SIZE   5
 `define	ALUOPS_SIZE	    4
+`define LOG2_FRF_SIZE   5
 
 // ALU operations
 `define	ALU_OP_ADD	4'b0000
@@ -50,7 +51,13 @@
 `define	OPCODE_IMM	7'b0010011 // immediate arithmetic, logic, shift, and slt instructions
 `define OPCODE_RTYPE	7'b0110011 // R-Type arithmetic, logic, shift, and slt instructions
 
-// Define floating point instruction types
-`define FLOAT_ADD  2'b00
-`define FLOAT_SUB  2'b01
-`define FLOAT_MUL  2'b10
+// Floating-point opcodes
+`define OPCODE_FP         7'b1010011  // FADD.S, FSUB.S, FMUL.S
+
+// Floating-point funct3 values
+`define FP_FUNCT3_S       3'b010      // Single-precision
+
+// Floating-point funct7 values
+`define FP_FUNCT7_ADD     7'b0000000  // FADD.S
+`define FP_FUNCT7_SUB     7'b0000100  // FSUB.S
+`define FP_FUNCT7_MUL     7'b0001000  // FMUL.S

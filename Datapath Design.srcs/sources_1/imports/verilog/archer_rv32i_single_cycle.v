@@ -29,11 +29,7 @@ module archer_rv32i_single_cycle (
 	output [`XLEN-1:0] dmem_datain,
 	input [`XLEN-1:0] dmem_dataout,
 	output dmem_wen,
-	output [3:0] dmem_ben,
-	output [31:0] reg_x1,
-    output [31:0] reg_x2,
-    output [31:0] reg_x3,
-    output [31:0] reg_x4
+	output [3:0] dmem_ben
 	);
 	
     // pc wires
@@ -41,7 +37,6 @@ module archer_rv32i_single_cycle (
     wire [`XLEN-1:0] d_pc_out;
 
     // imem wires
-    //wire [`ADDRLEN-1:0] d_imem_addr;
     wire [`XLEN-1:0] d_instr_word;
 
     // add4 wires
@@ -59,12 +54,26 @@ module archer_rv32i_single_cycle (
     wire c_mem_write;
     wire c_mem_read;
     wire c_mem_to_reg;
-
+    
+    
+    // fpu control wires
+    
+    wire c_FRegWrite;
+    wire [1:0] c_FPUOp;
+    wire c_FMemToReg;
+    wire c_FMemWrite;
     // register file wires
 
     wire [`XLEN-1:0] d_reg_file_datain;
     wire [`XLEN-1:0] d_regA;
     wire [`XLEN-1:0] d_regB;
+
+
+    // fpu register file wires
+
+    wire [`XLEN-1:0] d_fp_reg_file_datain;
+    wire [`XLEN-1:0] d_fp_regA;
+    wire [`XLEN-1:0] d_fp_regB;
 
     // immgen wires
 
@@ -87,6 +96,11 @@ module archer_rv32i_single_cycle (
 
     wire [`XLEN-1:0] d_alu_out;
 
+    // fpu wires
+
+    wire [`XLEN-1:0] d_fpu_out;
+    wire d_fpu_done;
+
     // mem_mux wires
 
     wire [`XLEN-1:0] d_mem_mux_out;
@@ -96,6 +110,7 @@ module archer_rv32i_single_cycle (
     wire [1:0] d_byte_mask;
     wire d_sign_ext_n;
     wire [`XLEN-1:0] d_data_mem_out;
+    wire [`XLEN-1:0] d_mem_data_send;
 
     // instruction word fields
 
@@ -104,44 +119,9 @@ module archer_rv32i_single_cycle (
     wire [4:0] d_rd;
     wire [2:0] d_funct3;
     wire [6:0] d_funct7;
-    
-    
-    // FPU-specific fields
-        
-    localparam FLOAT_ADD = 2'b00;
-    localparam FLOAT_SUB = 2'b01;
-    localparam FLOAT_MUL = 2'b10; // Added since even after telling the compiler to compile archerdefs.v first, those vars are not defined.
+    wire [6:0] d_opcode;
 
-    
-    wire is_fp_op;
-    wire [1:0] instruction_type;
-    wire [1:0] fpu_opcode;
-    wire [31:0] fpu_result;
-    localparam DEFAULT = 2'b11;
-    
-    assign instruction_type = (imem_dataout[6:0] == 7'b1010011 && imem_dataout[14:12] == 3'b000 && imem_dataout[31:25] == 7'b0000000) ? FLOAT_ADD :
-                              (imem_dataout[6:0] == 7'b1010011 && imem_dataout[14:12] == 3'b000 && imem_dataout[31:25] == 7'b0000100) ? FLOAT_SUB :
-                              (imem_dataout[6:0] == 7'b1010011 && imem_dataout[14:12] == 3'b000 && imem_dataout[31:25] == 7'b0001000) ? FLOAT_MUL :
-                              DEFAULT;
-    
-    assign is_fp_op = (instruction_type == FLOAT_ADD) || 
-                      (instruction_type == FLOAT_SUB) ||
-                      (instruction_type == FLOAT_MUL);
-    
-    
-    assign fpu_opcode = (instruction_type == FLOAT_ADD) ? 2'b00 :
-                        (instruction_type == FLOAT_SUB) ? 2'b01 :
-                        (instruction_type == FLOAT_MUL) ? 2'b10 :
-                        2'b00; // default
-    
-    FPU my_fpu (
-        .op1(rs1_data),     // first operand
-        .op2(rs2_data),     // second operand
-        .opcode(fpu_opcode), // new signal you define below
-        .result(fpu_result)
-    );
 
-    
     pc pc_inst (.clk(clk), 
                 .rst_n(rst_n), 
                 .datain(d_pc_in), 
@@ -179,12 +159,24 @@ module archer_rv32i_single_cycle (
     			  .ALUOp(c_alu_op),
     			  .MemWrite(c_mem_write),
     			  .MemRead(c_mem_read),
-    			  .MemToReg(c_mem_to_reg));
+    			  .MemToReg(c_mem_to_reg),
+    			  .FRegWrite(c_FRegWrite),
+                  .FPUOp(c_FPUOp),
+                  .FMemToReg(c_FMemToReg),
+                  .FMemWrite(c_FMemWrite));
     			  
     mux2to1 write_back_mux (.sel(c_jump),
     			    .input0(d_mem_mux_out),
     			    .input1(d_pcplus4),
     			    .muxout(d_reg_file_datain));
+
+
+    mux2to1 fp_mem_mux (
+        .sel(c_FMemToReg),
+        .input0(d_fpu_out),
+        .input1(d_data_mem_out),
+        .muxout(d_fp_reg_file_datain)
+    );
     			    
     regfile RF_inst (.clk(clk),
     		     .rst_n(rst_n),
@@ -194,13 +186,21 @@ module archer_rv32i_single_cycle (
     		     .rd(d_rd),
     		     .datain(d_reg_file_datain),
     		     .regA(d_regA),
-    		     .regB(d_regB),
-    		     .reg_x1(reg_x1),
-                 .reg_x2(reg_x2),
-                 .reg_x3(reg_x3),
-                 .reg_x4(reg_x4));
-    
-    		     
+    		     .regB(d_regB));
+
+    // FPU register file
+    fregfile FRF_inst (
+        .clk(clk),
+        .rst_n(rst_n),
+        .RegWrite(c_FRegWrite),
+        .rs1(d_rs1),
+        .rs2(d_rs2),
+        .rd(d_rd),
+        .datain(d_fp_reg_file_datain),
+        .regA(d_fp_regA),
+        .regB(d_fp_regB)
+    );
+
     branch_cmp brcmp_inst (.inputA(d_regA),
     			   .inputB(d_regB),
     			   .cond(d_funct3),
@@ -225,17 +225,24 @@ module archer_rv32i_single_cycle (
     			  .muxout(d_alu_src2));
     			 
     mux2to1 mem_mux (.sel(c_mem_to_reg),
-                     .input0(d_alu_out),
-                     .input1(d_data_mem_out),
-                     .muxout(d_mem_mux_out));
-                     
+                    .input0(d_alu_out),
+                    .input1(d_data_mem_out),
+                    .muxout(d_mem_mux_out));
+
+    mux2to1 mem_data_send_mux (
+            .sel(c_FMemWrite),
+            .input0(d_regB),
+            .input1(d_fp_regB), 
+            .muxout(d_mem_data_send));
+
+
     alu alu_inst (.inputA(d_alu_src1),
                   .inputB(d_alu_src2),
                   .ALUop(c_alu_op),
                   .result(d_alu_out));
     			
     lmb ldmb_inst (.proc_addr(d_alu_out),
-    		   .proc_data_send(d_regB),
+    		   .proc_data_send(d_mem_data_send),
     		   .proc_data_receive(d_data_mem_out),
     		   .proc_byte_mask(d_byte_mask),
     		   .proc_sign_ext_n(d_sign_ext_n),
@@ -246,7 +253,15 @@ module archer_rv32i_single_cycle (
     		   .mem_dataout(dmem_dataout),
     		   .mem_wen(dmem_wen),
     		   .mem_ben(dmem_ben));
-    		   
+
+    // FPU instance
+    FPU fpu_inst (
+        .op1(d_fp_regA),
+        .op2(d_fp_regB),
+        .opcode(c_FPUOp),
+        .result(d_fpu_out)
+    );
+
     assign d_rs1 = d_instr_word[`LOG2_XRF_SIZE+14:15];
     assign d_rs2 = d_instr_word[`LOG2_XRF_SIZE+19:20];
     assign d_rd = d_instr_word[`LOG2_XRF_SIZE+6:7];
@@ -255,6 +270,7 @@ module archer_rv32i_single_cycle (
     assign d_zero = `XLEN'd0;
     assign d_byte_mask = d_funct3[1:0];
     assign d_sign_ext_n = d_funct3[2];
+    assign d_opcode = d_instr_word[6:0];    
+
 	
 endmodule
-
