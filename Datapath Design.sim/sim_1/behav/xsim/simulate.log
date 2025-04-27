@@ -1,8 +1,1 @@
 Time resolution is 1 ps
-
---- Test Results ---
-Register x1 (should be 1.0): 3f800000
-Register x2 (should be 1.0): 3f800000
-Register x3 (ADD result should be 2.0): 00000000
-Register x4 (MUL result should be 1.0): 00000000
-$stop called at time : 130 ns : File "C:/Users/Khalil El Kaaki/Desktop/EECE 321/Project/Datapath-Design/Datapath Design.srcs/sim_1/new/other_archer_rv32_single_cycle_tb.v" Line 78
