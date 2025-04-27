@@ -27,6 +27,7 @@ The FPU was designed and verified separately, and then integrated into the proce
 | `rom.v` | Instruction memory module |
 | `sram.v` | Data memory module |
 | `regfile.v` | Register file module (extended to expose x1-x4) |
+| `fregfile.v` | Floating point register file module |
 | `archerdefs.v` | Macro definitions (XLEN, etc.) |
 
 
