@@ -29,10 +29,9 @@ module control (
 	output reg MemRead,
 	output reg MemToReg,
 	// Floating-point control signals
-  output reg FRegWrite,      // Float register write enable
-  output reg [1:0] FPUOp,    // FPU operation code
-  output reg FMemToReg,
-  output reg FMemWrite    // Float memory to register
+ 	output reg [1:0] FPUOp,    // FPU operation code
+	output reg FP_Instruction,
+	output reg MemtoFreg
 );
 	
   wire [6:0] opcode;
@@ -61,12 +60,10 @@ module control (
     MemWrite = 1'b0;
     MemRead = 1'b0;
     MemToReg = 1'b0;
-    
-    // Floating-point defaults
-    FRegWrite = 1'b0;
     FPUOp = 2'b00;
-    FMemToReg = 1'b0;
-    FMemWrite = 1'b0;
+    FP_Instruction = 1'b0;
+    MemtoFreg = 1'b0;
+    
     case (opcode)
       `OPCODE_LUI :
         begin
@@ -101,35 +98,43 @@ module control (
         
       `OPCODE_LOAD :
         begin
-          if (funct3 == `FP_FUNCT3_S) begin // FLW
-            FRegWrite = 1'b1;
-            ALUSrc2 = 1'b1;
-            ALUOp = `ALU_OP_ADD;
-            MemRead = 1'b1;
-            FMemToReg = 1'b1;
-          end else begin // Regular load
-            RegWrite = 1'b1;
-            ALUSrc2 = 1'b1;
-            ALUOp = `ALU_OP_ADD;
-            MemRead = 1'b1;
-            MemToReg = 1'b1;
-          end
+          RegWrite = 1'b1;
+          ALUSrc2 = 1'b1;
+          ALUOp = `ALU_OP_ADD;
+          MemRead = 1'b1;
+          MemToReg = 1'b1;
         end
+
         
       `OPCODE_STORE :
         begin
-          if (funct3 == `FP_FUNCT3_S) begin // FSW
-            ALUSrc2 = 1'b1;
-            ALUOp = `ALU_OP_ADD;
-            MemWrite = 1'b1;
-            FMemWrite = 1'b1;
-          end else begin // Regular store
-            ALUSrc2 = 1'b1;
-            ALUOp = `ALU_OP_ADD;
-            MemWrite = 1'b1;
-          end
+	  ALUSrc2 = 1'b1;
+          ALUOp = `ALU_OP_ADD;
+          MemWrite = 1'b1;
         end
-        
+      
+
+     `OPCODE_FLW :
+        begin
+	      FP_Instruction = 1'b1;
+          RegWrite = 1'b1;
+          ALUSrc2 = 1'b1;
+          ALUOp = `ALU_OP_ADD;
+          MemRead = 1'b1;
+          MemtoFreg = 1'b1;
+        end
+
+
+
+      `OPCODE_FSW :
+        begin
+	      FP_Instruction = 1'b1;
+	      ALUSrc2 = 1'b1;
+          ALUOp = `ALU_OP_ADD;
+          MemWrite = 1'b1;
+        end
+
+  
       `OPCODE_IMM :
         begin
           RegWrite = 1'b1;
@@ -147,7 +152,8 @@ module control (
         end
 
       `OPCODE_FP:begin
-        FRegWrite = 1'b1;
+        RegWrite = 1'b1;
+	    FP_Instruction = 1'b1;
         case (funct7)
           `FP_FUNCT7_ADD: FPUOp = 2'b00; // FADD.S
           `FP_FUNCT7_SUB: FPUOp = 2'b01; // FSUB.S
