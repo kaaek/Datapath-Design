@@ -48,7 +48,7 @@ module sp_mul(
     
     always @(*)
     begin
-        // IEEE 754-2019: "when neither the inputs nor result are NaN, the sign of the product ... is the exclusive OR of the operads' signs."
+        // IEEE 754-2019: "when neither the inputs are NaN, the sign of the product ... is the exclusive OR of the operads' signs."
         pSign = aSign ^ bSign;
         result = 32'h7FC00000; // initialize to sNaN.
         {snan, qnan, infinity, zero, subnormal, normal} = 6'b000000; // initialize to zero. By the end of the implementation, 1 of the flags must necessarily be set, no more and no less.
