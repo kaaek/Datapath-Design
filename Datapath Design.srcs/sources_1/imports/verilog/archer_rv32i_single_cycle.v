@@ -113,6 +113,8 @@ module archer_rv32i_single_cycle (
     wire [4:0] d_rd;
     wire [2:0] d_funct3;
     wire [6:0] d_funct7;
+    wire [6:0] d_opcode;
+
     
 
     wire [31:0] src;
