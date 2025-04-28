@@ -53,6 +53,9 @@
 
 // Floating-point opcodes
 `define OPCODE_FP         7'b1010011  // FADD.S, FSUB.S, FMUL.S
+`define OPCODE_FLW         7'b0000111  
+`define OPCODE_FSW         7'b0100111 
+
 
 // Floating-point funct3 values
 `define FP_FUNCT3_S       3'b010      // Single-precision
