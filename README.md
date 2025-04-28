@@ -1,78 +1,100 @@
-# Floating Point Unit (FPU) Integration - EECE 321 Project
+# Floating Point Unit (FPU) Integration with Archer RV32I Processor
 
 ## Project Overview
 
-This project extends the Archer RV32I single-cycle processor by integrating a Floating Point Unit (FPU) that supports IEEE-754 compliant single-precision operations.
+This project enhances the Archer RV32I single-cycle processor by integrating support for IEEE-754 single-precision floating-point operations.  
+The implemented FPU supports three operations:
 
-The project's objective is for the Archer RV32I single-cycle processor to be able to handle:
-- Floating point addition (`FADD.S`)
-- Floating point subtraction (`FSUB.S`)
-- Floating point multiplication (`FMUL.S`)
-- Floating point load (`FLW`) and store (`FSW`) operations
+- **Floating Point Addition (FADD.S)**
+- **Floating Point Subtraction (FSUB.S)**
+- **Floating Point Multiplication (FMUL.S)**
 
-The FPU was designed and verified separately, and then integrated into the processor datapath alongside the ALU.
-
----
-
-## Files and Structure
-
-| File | Purpose |
-|-----|---------|
-| `sp_add.v` | Single precision floating-point addition module |
-| `sp_sub.v` | Single precision floating-point subtraction module |
-| `sp_mul.v` | Single precision floating-point multiplication module |
-| `sp_class.v` | Floating point classifier module (used internally) |
-| `FPU.v` | Wrapper module that selects between add, sub, mul |
-| `archer_rv32i_single_cycle.v` | Top-level processor design |
-| `archer_rv32i_single_cycle_tb.v` | Testbench for processor |
-| `rom.v` | Instruction memory module |
-| `sram.v` | Data memory module |
-| `regfile.v` | Register file module (extended to expose x1-x4) |
-| `fregfile.v` | Floating point register file module |
-| `archerdefs.v` | Macro definitions (XLEN, etc.) |
-
+The integration allows the processor to execute floating-point instructions alongside the existing RV32I integer instruction set.
 
 ---
 
-## How It Works
+## Implemented Modules
 
-- The FPU operates **in parallel** with the ALU.
-- The control module(control.v) reads and decodes the incoming 32-bit instruction and generates the the appropriate control signals to direct the ALU, FPU, and other processor components based on the instruction type.
-- The FPU decodes the operation (add, sub, mul) based on opcode fields.
-- Floating point load/store operations use the data memory directly, with appropriate wiring.
-
----
-
-## How to Simulate
-
-1. Open Vivado and open the project.
-2. Make sure all Verilog files are added properly.
-3. Set the top module to `archer_rv32i_single_cycle_tb`.
-4. Run "Elaborate Design".
-5. Run "Simulate Behavioral Model".
+- **sp_class.v**: Classifies an IEEE-754 floating point number (normal, subnormal, NaN, infinity, zero).
+- **sp_add.v**: Performs floating-point addition (FADD.S).
+- **sp_sub.v**: Performs floating-point subtraction (FSUB.S).
+- **sp_mul.v**: Performs floating-point multiplication (FMUL.S).
+- **FPU.v**: Top-level module that connects sp_add, sp_sub, and sp_mul based on the opcode provided.
+- **fregfile.v**: Floating-point register file (parallel to the integer regfile).
 
 ---
 
+## Integration with Archer RV32I
 
-## Special Notes
+The FPU was integrated into the Archer pipeline as follows:
 
-- The register file (`regfile.v`) was modified to expose registers x1-x4 for easy monitoring.
-- A floating-point classifier (`sp_class.v`) was used inside FPU modules to correctly handle special cases (zero, NaN, infinity, etc.).
-- Floating-point numbers follow the IEEE-754 single precision format.
+- Added a **Floating Point Register File (FRF)** to hold floating point values.
+- Extended the **control unit** (`control.v`) to generate new control signals:
+  - **FRegWrite**: Floating point register write enable.
+  - **FPUOp**: 2-bit opcode for the FPU (00: ADD, 01: SUB, 10: MUL).
+  - **FMemToReg**: Selects between FPU output and data memory output.
+  - **FMemWrite**: Selects whether a memory write comes from a floating-point register or an integer register.
+- **Modified datapath**:
+  - Added FPU instantiation.
+  - Routed operands from FRF to the FPU.
+  - Routed FPU result back to FRF.
+- **Maintained full support** for the original RV32I instruction set, extending Archer capabilities without affecting original functionality.
 
 ---
 
-## Project Status
+## Testing
 
-✅ Floating-point addition tested and validated.  
-✅ Floating-point subtraction tested and validated.  
-✅ Floating-point multiplication tested and validated.  
-✅ Floating-point load and store tested and validated.
+- Each individual module (sp_class, sp_add, sp_sub, sp_mul, FPU) has been tested with dedicated testbenches.
+- **Archer** has been tested with a preloaded ROM containing floating-point instructions:
+  - **ADD.S** test
+  - **SUB.S** test
+  - **MUL.S** test
+  - **Floating-point load/store tests**
+
+### Example FPU Testbench Results
+
+| Operation                  | Result       |
+|-----------------------------|--------------|
+| ADD (1.0 + 1.0)             | 0x40000000 (2.0) |
+| SUB (1.0 - 1.0)             | 0x00000000 (0.0) |
+| MUL (2.0 * 3.0)             | 0x40C00000 (6.0) |
+| MUL (tiny * tiny)           | 0x00000000 (underflow) |
+| ADD (inf + 1.0)             | 0x7F800000 (inf) |
+| SUB (inf - inf)             | 0x7FBFFFFF (NaN) |
+| MUL (inf * 0)               | 0x7FC00000 (NaN) |
 
 ---
 
-## Credits
+## File List
 
-- Developed as part of EECE 321 - Computer Organization and Design, Spring 2025
-- Based on the Archer open-source CPU project by Embedded and Reconfigurable Computing Lab, American University of Beirut.
+- `sp_class.v`
+- `sp_add.v`
+- `sp_sub.v`
+- `sp_mul.v`
+- `FPU.v`
+- `fregfile.v`
+- `archer_rv32i_single_cycle.v`
+- `control.v`
+- `rom.v`
+- `pc.v`
+- `other_archer_rv32_single_cycle_tb.v` (testbench)
 
+---
+
+## Instructions for Running
+
+1. **Open Vivado** and create a new project.
+2. **Add all Verilog source files** listed above to the project.
+3. **Set `other_archer_rv32_single_cycle_tb.v` as the top module** for simulation.
+4. **Run Behavioral Simulation** to observe processor operation and FPU results.
+5. **Check ROM** contents to confirm that floating-point instructions are preloaded.
+6. **Observe register file outputs** for expected floating-point results.
+
+---
+
+## Notes
+
+- Floating-point instructions are identified via opcodes and passed directly to the FPU.
+- The FPU module is **fully combinational** (no internal clocks).
+- Special cases (NaNs, Infs, subnormals) are handled according to IEEE-754 standards.
+- **ROM** needs to be populated with RISC-V machine code representing floating point programs.
